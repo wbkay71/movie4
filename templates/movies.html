@@ -29,9 +29,25 @@
                             <h3>{{ movie.title }}</h3>
                             <p><strong>Director:</strong> {{ movie.director }}</p>
                             <p><strong>Year:</strong> {{ movie.year }}</p>
-                            <p><strong>Rating:</strong> {{ movie.rating }}/10</p>
+
+                            <!-- NEW: Show both ratings with formatting -->
+                            <div class="ratings">
+                                <!-- OMDb rating with N/A for missing values -->
+                                <span class="omdb-rating">⭐ OMDb: {{ movie.rating|format_rating(show_na=True) }}/10</span>
+
+                                <!-- Make user rating clickable -->
+                                <a href="{{ url_for('update_movie_form', user_id=user.id, movie_id=movie.id) }}#user_rating"
+                                   class="user-rating-link"
+                                   title="Click to rate this movie">
+                                    {% if movie.user_rating %}
+                                        <span class="user-rating">💜 My Rating: {{ movie.user_rating|format_rating }}/10</span>
+                                    {% else %}
+                                        <span class="no-user-rating">💜 Click to rate</span>
+                                    {% endif %}
+                                </a>
+                            </div>
                         </div>
-                        
+
                         <!-- Movie actions -->
                         <div class="movie-actions">
                             <!-- Update button (links to update form) -->

@@ -94,7 +94,7 @@ class DataManager:
             title (str): Movie title
             director (str): Movie director
             year (int): Release year
-            rating (float): Movie rating
+            rating (float): OMDb rating
             poster (str, optional): Poster URL
             imdb_id (str, optional): IMDb ID
 
@@ -106,12 +106,13 @@ class DataManager:
         if not user:
             return None
 
-        # Create new movie
+        # Create new movie with OMDb data
         new_movie = Movie(
             title=title,
             director=director,
             year=year,
-            rating=rating,
+            rating=rating,  # OMDb rating
+            user_rating=None,  # User rating starts as None
             poster=poster,
             imdb_id=imdb_id,
             user_id=user_id
@@ -123,16 +124,16 @@ class DataManager:
 
         return new_movie
 
-    def update_movie(self, movie_id, title, director, year, rating):
+    def update_movie(self, movie_id, title, director, year, user_rating):
         """
-        Update an existing movie.
+        Update an existing movie (but NOT the OMDb rating).
 
         Args:
             movie_id (int): The movie's ID
             title (str): New title
             director (str): New director
             year (int): New year
-            rating (float): New rating
+            user_rating (float): User's personal rating
 
         Returns:
             Movie: Updated Movie object or None if not found
@@ -142,11 +143,12 @@ class DataManager:
         if not movie:
             return None
 
-        # Update fields
+        # Update fields (but NOT the OMDb rating!)
         movie.title = title
         movie.director = director
         movie.year = year
-        movie.rating = rating
+        movie.user_rating = user_rating  # Update user's personal rating
+        # movie.rating stays unchanged - it's the OMDb rating
 
         # Save changes
         db.session.commit()

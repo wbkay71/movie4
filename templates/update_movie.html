@@ -57,18 +57,28 @@
                 <small class="form-text">First movie was made in 1888!</small>
             </div>
             
-            <!-- Rating field -->
+            <!-- OMDb Rating - READ ONLY -->
             <div class="form-group">
-                <label for="rating">Rating (0-10):</label>
+                <label>OMDb Rating:</label>
+                <div class="rating-display">
+                    <span class="omdb-rating">⭐ {{ movie.rating|format_rating(show_na=True) }}/10</span>
+                    <small class="form-text">This is the official OMDb rating and cannot be changed</small>
+                </div>
+            </div>
+            
+            <!-- User Rating field - EDITABLE -->
+            <div class="form-group">
+                <label for="user_rating">My Rating (0-10):</label>
                 <input type="number" 
-                       id="rating" 
-                       name="rating" 
-                       value="{{ movie.rating }}" 
+                       id="user_rating" 
+                       name="user_rating" 
+                       value="{{ movie.user_rating|format_rating if movie.user_rating else '' }}" 
                        min="0" 
                        max="10" 
                        step="0.1" 
-                       required 
+                       placeholder="Give your personal rating"
                        class="form-control">
+                <small class="form-text">Your personal rating for this movie</small>
             </div>
             
             <!-- Current poster preview if exists -->

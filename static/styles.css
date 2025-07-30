@@ -451,3 +451,246 @@ footer p {
         gap: 1rem;
     }
 }
+
+/* Search section */
+.search-section {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.results-count {
+    color: var(--text-muted);
+    margin: 1rem 0;
+}
+
+/* Search results grid */
+.search-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* Search result card */
+.search-card {
+    position: relative;
+    background-color: #1a1a1a;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    transition: var(--transition);
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+}
+
+.search-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Search poster */
+.search-poster {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.search-no-poster {
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #2a2a2a;
+}
+
+.search-no-poster span {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.search-no-poster p {
+    color: var(--text-muted);
+}
+
+/* Search info */
+.search-info {
+    padding: 1rem;
+}
+
+.search-info h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--primary-color);
+}
+
+.search-info p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+/* Add overlay on hover */
+.add-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(229, 9, 20, 0.9);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.search-card:hover .add-overlay {
+    opacity: 1;
+}
+
+.add-icon {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.add-overlay p {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* No results */
+.no-results {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-muted);
+}
+
+.no-results p {
+    margin-bottom: 1rem;
+}
+
+/* New search form */
+.new-search {
+    background-color: #1a1a1a;
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    margin-top: 2rem;
+    max-width: 600px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .search-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+
+    .search-poster,
+    .search-no-poster {
+        height: 225px;
+    }
+}
+
+/* Rating display in update form */
+.rating-display {
+    padding: 0.75rem;
+    background-color: #2a2a2a;
+    border-radius: var(--border-radius);
+    border: 1px solid #444444;
+}
+
+.omdb-rating {
+    font-size: 1.1rem;
+    color: #ffd700;  /* Gold color for OMDb rating */
+}
+
+/* Ratings in movie cards */
+.ratings {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.ratings span {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.user-rating {
+    color: #da70d6;  /* Orchid color for user rating */
+}
+
+/* Make OMDb rating look non-editable */
+.rating-display {
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+/* Highlight user rating input */
+#user_rating {
+    border-color: #da70d6;
+}
+
+.no-user-rating {
+    color: #999;
+    font-style: italic;
+}
+
+#user_rating:focus {
+    border-color: #da70d6;
+    box-shadow: 0 0 0 2px rgba(218, 112, 214, 0.2);
+}
+
+/* Clickable user rating */
+.user-rating-link {
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.user-rating-link:hover span {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(218, 112, 214, 0.3);
+}
+
+/* Update the no-user-rating when hoverable */
+.user-rating-link .no-user-rating {
+    color: #999;
+    font-style: italic;
+    cursor: pointer;
+}
+
+.user-rating-link:hover .no-user-rating {
+    color: #da70d6;
+    font-style: normal;
+}
+
+/* Add subtle animation */
+.user-rating-link span {
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+
+/* Tooltip on hover */
+.user-rating-link::after {
+    content: attr(title);
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+
+.user-rating-link:hover::after {
+    opacity: 1;
+}

@@ -37,7 +37,8 @@ class Movie(db.Model):
     title = db.Column(db.String(200), nullable=False)
     director = db.Column(db.String(100))
     year = db.Column(db.Integer)
-    rating = db.Column(db.Float)
+    rating = db.Column(db.Float)  # OMDb rating (read-only)
+    user_rating = db.Column(db.Float)  # User's personal rating (editable)
     poster = db.Column(db.String(300))
     imdb_id = db.Column(db.String(20))
 
@@ -46,4 +47,4 @@ class Movie(db.Model):
 
     def __repr__(self):
         """String representation of Movie object."""
-        return f'<Movie {self.title}>'  # Changed from self.name to self.title
+        return f'<Movie {self.title}>'
