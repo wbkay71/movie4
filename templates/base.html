@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Character encoding for proper text display -->
+    <meta charset="UTF-8">
+    <!-- Make website responsive on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Page title - child templates can override this block -->
+    <title>{% block title %}MoviWeb App{% endblock %}</title>
+
+    <!-- Link to CSS file using Flask's url_for function -->
+    <!-- This ensures the path works even if URL structure changes -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <!-- Navigation bar that appears on every page -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <!-- Logo with link to home page -->
+                <a href="{{ url_for('index') }}" class="logo">🎬 MoviWeb App</a>
+
+                <!-- Navigation menu -->
+                <ul class="nav-links">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('index') }}">Users</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main content container -->
+    <main class="container">
+        <!-- Flash messages section for user feedback -->
+        <!-- 'with' creates a variable that exists only in this block -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            <!-- Only show this div if there are messages -->
+            {% if messages %}
+                <div class="flash-messages">
+                    <!-- Loop through each message -->
+                    {% for category, message in messages %}
+                        <!-- Category can be 'success', 'error', etc. -->
+                        <div class="flash-message flash-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Content block - child templates will fill this -->
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer with copyright information -->
+    <footer>
+        <div class="container">
+            <!-- Automatic year update using Python's datetime -->
+            <p>&copy; {{ current_year }} MoviWeb App - Built with Flask</p>
+        </div>
+    </footer>
+</body>
+</html>

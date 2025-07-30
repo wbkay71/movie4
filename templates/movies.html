@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}{{ user.name }}'s Movies - MoviWeb App{% endblock %}
+
+{% block content %}
+<div class="movies-section">
+    <!-- Page heading with user name -->
+    <h1>{{ user.name }}'s Movies</h1>
+    
+    <!-- Back to users link -->
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">← Back to Users</a>
+    
+    <!-- Display all movies for this user -->
+    <div class="movies-list">
+        {% if movies %}
+            <!-- Movie cards grid -->
+            <div class="movie-grid">
+                {% for movie in movies %}
+                    <div class="movie-card">
+                        <!-- Movie poster (if available) -->
+                        {% if movie.poster and movie.poster != 'N/A' %}
+                            <img src="{{ movie.poster }}" alt="{{ movie.title }} poster" class="movie-poster">
+                        {% else %}
+                            <div class="no-poster">🎬</div>
+                        {% endif %}
+                        
+                        <!-- Movie details -->
+                        <div class="movie-info">
+                            <h3>{{ movie.title }}</h3>
+                            <p><strong>Director:</strong> {{ movie.director }}</p>
+                            <p><strong>Year:</strong> {{ movie.year }}</p>
+                            <p><strong>Rating:</strong> {{ movie.rating }}/10</p>
+                        </div>
+                        
+                        <!-- Movie actions -->
+                        <div class="movie-actions">
+                            <!-- Update button (links to update form) -->
+                            <a href="{{ url_for('update_movie_form', user_id=user.id, movie_id=movie.id) }}" 
+                               class="btn btn-primary btn-sm">
+                                ✏️ Update
+                            </a>
+                            
+                            <!-- Delete button -->
+                            <form action="{{ url_for('delete_movie', user_id=user.id, movie_id=movie.id) }}" 
+                                  method="post" 
+                                  class="delete-movie-form">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    🗑️ Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Message when no movies exist -->
+            <p class="no-movies">No movies yet. Add your first movie below!</p>
+        {% endif %}
+    </div>
+    
+    <!-- Form to add new movie -->
+    <div class="add-movie-form">
+        <h2>Add New Movie</h2>
+        
+        <!-- Form posts to add_movie route -->
+        <form action="{{ url_for('add_movie', user_id=user.id) }}" method="post">
+            <div class="form-group">
+                <label for="title">Movie Title:</label>
+                <!-- For now, just title - OMDb will fill the rest -->
+                <input type="text" 
+                       id="title" 
+                       name="title" 
+                       required 
+                       placeholder="Enter movie title (e.g., The Matrix)"
+                       class="form-control">
+                <small class="form-text">We'll fetch movie details from OMDb API automatically!</small>
+            </div>
+            
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Add Movie</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

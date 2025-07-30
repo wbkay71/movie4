@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}MoviWeb App - All Users{% endblock %}
+
+{% block content %}
+<div class="users-section">
+    <!-- Page heading -->
+    <h1>Users</h1>
+    
+    <!-- Display list of all users -->
+    <div class="users-list">
+        {% if users %}
+            <!-- If we have users, show them in a list -->
+            <ul>
+                {% for user in users %}
+                    <li class="user-item">
+                        <!-- User info and actions container -->
+                        <div class="user-row">
+                            <!-- Each user name links to their movie list -->
+                            <a href="{{ url_for('user_movies', user_id=user.id) }}" class="user-link">
+                                👤 {{ user.name }}
+                            </a>
+                            
+                            <!-- Delete button without JavaScript -->
+                            <form action="{{ url_for('delete_user', user_id=user.id) }}" 
+                                  method="post" 
+                                  class="delete-form">
+                                <button type="submit" 
+                                        class="btn btn-danger btn-sm">
+                                    🗑️ Delete
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <!-- If no users exist yet, show this message -->
+            <p class="no-users">No users yet. Add your first user below!</p>
+        {% endif %}
+    </div>
+
+    <!-- Form to add new user -->
+    <div class="add-user-form">
+        <h2>Add New User</h2>
+        
+        <!-- POST form to create new user -->
+        <form action="{{ url_for('create_user') }}" method="post">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <!-- Text input for user name -->
+                <input type="text" 
+                       id="name" 
+                       name="name" 
+                       required 
+                       placeholder="Enter user name"
+                       class="form-control">
+            </div>
+            
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary">Add User</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

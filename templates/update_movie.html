@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}Update Movie - {{ movie.title }}{% endblock %}
+
+{% block content %}
+<div class="update-movie-section">
+    <!-- Page heading -->
+    <h1>Update Movie</h1>
+    
+    <!-- Back link to user's movies -->
+    <a href="{{ url_for('user_movies', user_id=user.id) }}" class="btn btn-secondary">
+        ← Back to {{ user.name }}'s Movies
+    </a>
+    
+    <!-- Update form -->
+    <div class="update-form-container">
+        <h2>Edit Movie Details</h2>
+        
+        <!-- Form posts to update_movie route -->
+        <form action="{{ url_for('update_movie', user_id=user.id, movie_id=movie.id) }}" 
+              method="post" 
+              class="movie-form">
+            
+            <!-- Title field -->
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" 
+                       id="title" 
+                       name="title" 
+                       value="{{ movie.title }}" 
+                       required 
+                       class="form-control">
+            </div>
+            
+            <!-- Director field -->
+            <div class="form-group">
+                <label for="director">Director:</label>
+                <input type="text" 
+                       id="director" 
+                       name="director" 
+                       value="{{ movie.director }}" 
+                       required 
+                       class="form-control">
+            </div>
+            
+            <!-- Year field -->
+            <div class="form-group">
+                <label for="year">Year:</label>
+                <input type="number" 
+                       id="year" 
+                       name="year" 
+                       value="{{ movie.year }}" 
+                       min="1888" 
+                       max="2030" 
+                       required 
+                       class="form-control">
+                <small class="form-text">First movie was made in 1888!</small>
+            </div>
+            
+            <!-- Rating field -->
+            <div class="form-group">
+                <label for="rating">Rating (0-10):</label>
+                <input type="number" 
+                       id="rating" 
+                       name="rating" 
+                       value="{{ movie.rating }}" 
+                       min="0" 
+                       max="10" 
+                       step="0.1" 
+                       required 
+                       class="form-control">
+            </div>
+            
+            <!-- Current poster preview if exists -->
+            {% if movie.poster and movie.poster != 'N/A' %}
+                <div class="current-poster">
+                    <p><strong>Current Poster:</strong></p>
+                    <img src="{{ movie.poster }}" 
+                         alt="{{ movie.title }} poster" 
+                         class="poster-preview">
+                </div>
+            {% endif %}
+            
+            <!-- Submit buttons -->
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a href="{{ url_for('user_movies', user_id=user.id) }}" class="btn btn-secondary">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

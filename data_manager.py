@@ -11,9 +11,9 @@ class DataManager:
         pass
 
     # User operations
-    def create_user(self, name):
+    def add_user(self, name):
         """
-        Create a new user in the database.
+        Add a new user to the database.
 
         Args:
             name (str): The name of the user
@@ -30,7 +30,7 @@ class DataManager:
 
         return new_user
 
-    def get_users(self):
+    def get_all_users(self):
         """
         Get all users from the database.
 
@@ -51,8 +51,29 @@ class DataManager:
         """
         return User.query.get(user_id)
 
+    def delete_user(self, user_id):
+        """
+        Delete a user and all associated movies.
+
+        Args:
+            user_id (int): The user's ID to delete
+
+        Returns:
+            bool: True if deleted, False if user not found
+        """
+        # Get the user
+        user = User.query.get(user_id)
+        if not user:
+            return False
+
+        # Delete user (movies are deleted automatically due to cascade)
+        db.session.delete(user)
+        db.session.commit()
+
+        return True
+
     # Movie operations
-    def get_movies(self, user_id):
+    def get_user_movies(self, user_id):
         """
         Get all movies for a specific user.
 
@@ -64,33 +85,73 @@ class DataManager:
         """
         return Movie.query.filter_by(user_id=user_id).all()
 
-    def add_movie(self, movie):
+    def add_movie(self, user_id, title, director, year, rating, poster=None, imdb_id=None):
         """
-        Add a new movie to the database.
+        Add a new movie for a user.
 
         Args:
-            movie (Movie): Movie object to add
+            user_id (int): The user's ID
+            title (str): Movie title
+            director (str): Movie director
+            year (int): Release year
+            rating (float): Movie rating
+            poster (str, optional): Poster URL
+            imdb_id (str, optional): IMDb ID
+
+        Returns:
+            Movie: The created Movie object or None if user not found
         """
-        db.session.add(movie)
+        # Check if user exists
+        user = User.query.get(user_id)
+        if not user:
+            return None
+
+        # Create new movie
+        new_movie = Movie(
+            title=title,
+            director=director,
+            year=year,
+            rating=rating,
+            poster=poster,
+            imdb_id=imdb_id,
+            user_id=user_id
+        )
+
+        # Add to database
+        db.session.add(new_movie)
         db.session.commit()
 
-    def update_movie(self, movie_id, new_title):
+        return new_movie
+
+    def update_movie(self, movie_id, title, director, year, rating):
         """
-        Update a movie's title.
+        Update an existing movie.
 
         Args:
             movie_id (int): The movie's ID
-            new_title (str): The new title for the movie
+            title (str): New title
+            director (str): New director
+            year (int): New year
+            rating (float): New rating
 
         Returns:
-            bool: True if updated, False if movie not found
+            Movie: Updated Movie object or None if not found
         """
+        # Get the movie
         movie = Movie.query.get(movie_id)
-        if movie:
-            movie.name = new_title
-            db.session.commit()
-            return True
-        return False
+        if not movie:
+            return None
+
+        # Update fields
+        movie.title = title
+        movie.director = director
+        movie.year = year
+        movie.rating = rating
+
+        # Save changes
+        db.session.commit()
+
+        return movie
 
     def delete_movie(self, movie_id):
         """
@@ -102,9 +163,13 @@ class DataManager:
         Returns:
             bool: True if deleted, False if movie not found
         """
+        # Get the movie
         movie = Movie.query.get(movie_id)
-        if movie:
-            db.session.delete(movie)
-            db.session.commit()
-            return True
-        return False
+        if not movie:
+            return False
+
+        # Delete from database
+        db.session.delete(movie)
+        db.session.commit()
+
+        return True
